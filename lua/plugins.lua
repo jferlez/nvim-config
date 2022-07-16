@@ -183,13 +183,13 @@ require("packer").startup({
     -- use 'mg979/vim-visual-multi'
 
     -- Autosave files on certain events
-    use({
-      "Pocco81/AutoSave.nvim",
-      event = "VimEnter",
-      config = function()
-        vim.defer_fn(function() require('config.autosave') end, 1500)
-      end
-    })
+    -- use({
+    --   "Pocco81/AutoSave.nvim",
+    --   event = "VimEnter",
+    --   config = function()
+    --     vim.defer_fn(function() require('config.autosave') end, 1500)
+    --   end
+    -- })
 
     -- Show undo history visually
     use({"simnalamburt/vim-mundo", cmd = {"MundoToggle", "MundoShow"}})

@@ -69,7 +69,8 @@ let s:theme2dir = {
       \ 'kanagawa': 'kanagawa.nvim',
       \ }
 
-let s:theme = utils#RandElement(keys(s:theme2dir))
+" let s:theme = utils#RandElement(keys(s:theme2dir))
+let s:theme = 'onedark'
 let s:colorscheme_func = printf('s:theme_setup_dict.%s()', s:theme)
 
 if !has_key(s:theme_setup_dict, s:theme)

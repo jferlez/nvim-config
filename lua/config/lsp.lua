@@ -21,9 +21,35 @@ local custom_attach = function(client, bufnr)
   vim.keymap.set("n", "<space>q", function() vim.diagnostic.setqflist({open = true}) end, opts)
   vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, opts)
 
-  vim.api.nvim_create_autocmd("CursorHold", {
-    buffer=bufnr,
-    callback = function()
+  -- vim.api.nvim_create_autocmd("CursorHold", {
+  --   buffer=bufnr,
+  --   callback = function()
+  --     local opts = {
+  --       focusable = false,
+  --       close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+  --       border = 'rounded',
+  --       source = 'always',  -- show source in diagnostic popup window
+  --       prefix = ' '
+  --     }
+
+  --     if not vim.b.diagnostics_pos then
+  --       vim.b.diagnostics_pos = { nil, nil }
+  --     end
+
+  --     local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  --     if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2]) and
+  --       #vim.diagnostic.get() > 0
+  --     then
+  --         vim.diagnostic.open_float(nil, opts)
+  --     end
+
+  --     vim.b.diagnostics_pos = cursor_pos
+  --   end
+  -- })
+
+
+  vim.api.nvim_create_user_command("LF", 
+    function()
       local opts = {
         focusable = false,
         close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
@@ -44,19 +70,21 @@ local custom_attach = function(client, bufnr)
       end
 
       vim.b.diagnostics_pos = cursor_pos
-    end
-  })
+    end,
+    {}
+  )
+
 
   -- Set some key bindings conditional on server capabilities
-  if client.resolved_capabilities.document_formatting then
+  if client.server_capabilities.documentFormattingProvider then
     vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting_sync, opts)
   end
-  if client.resolved_capabilities.document_range_formatting then
+  if client.server_capabilities.documentRangeFormattingProvider then
     vim.keymap.set("x", "<space>f", vim.lsp.buf.range_formatting, opts)
   end
 
   -- The blow command will highlight the current variable and its usages in the buffer.
-  if client.resolved_capabilities.document_highlight then
+  if client.server_capabilities.documentHighlightProvider then
     vim.cmd([[
       hi! link LspReferenceRead Visual
       hi! link LspReferenceText Visual
