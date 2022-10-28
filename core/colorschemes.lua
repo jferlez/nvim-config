@@ -18,6 +18,7 @@ M.colorscheme2dir = {
   nightfox = "nightfox.nvim",
   kanagawa = "kanagawa.nvim",
   catppuccin = "catppuccin",
+  tokyonight = 'tokyonight.nvim',
 }
 
 M.gruvbox8 = function()
@@ -79,6 +80,10 @@ M.kanagawa = function()
   vim.cmd([[colorscheme kanagawa]])
 end
 
+M.tokyonight = function()
+  vim.cmd([[colorscheme tokyonight]])
+end
+
 M.catppuccin = function()
   -- available option: latte, frappe, macchiato, mocha
   vim.g.catppuccin_flavour = "frappe"
@@ -120,4 +125,6 @@ M.rand_colorscheme = function()
 end
 
 -- Load a random colorscheme
-M.rand_colorscheme()
+-- M.rand_colorscheme()
+M.tokyonight()
+
