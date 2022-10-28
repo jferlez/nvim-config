@@ -45,7 +45,7 @@ require("packer").startup({
     use({ "neovim/nvim-lspconfig", after = "cmp-nvim-lsp", config = [[require('config.lsp')]] })
 
     if vim.g.is_mac or vim.g.is_linux then
-      use({ "nvim-treesitter/nvim-treesitter", event = 'BufEnter', run = ":TSUpdate", config = [[require('config.treesitter')]] })
+      use({ "nvim-treesitter/nvim-treesitter", event = 'BufEnter', run = ":TSUpdate", config = [[require('config.treesitter')]],  commit = "4cccb6f494eb255b32a290d37c35ca12584c74d0" })
     end
 
     -- Python indent (follows the PEP8 style)
