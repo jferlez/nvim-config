@@ -134,7 +134,7 @@ packer.startup {
     use { "EdenEast/nightfox.nvim", opt = true }
     use { "rebelot/kanagawa.nvim", opt = true }
     use { "catppuccin/nvim", as = "catppuccin", opt = true }
-    use({"folke/tokyonight.nvim", opt = true})
+    use {"folke/tokyonight.nvim", opt = true}
 
     use { "kyazdani42/nvim-web-devicons", event = "VimEnter" }
 
