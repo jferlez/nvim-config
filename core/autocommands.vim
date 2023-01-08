@@ -119,5 +119,10 @@ augroup LargeFile
   autocmd BufReadPre * call s:handle_large_file()
 augroup END
 
+augroup git_commit_spell
+  autocmd!
+  autocmd FileType gitcommit setlocal spell
+augroup END
+
 " Load auto-command defined in Lua
 lua require("custom-autocmd")
