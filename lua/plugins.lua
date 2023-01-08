@@ -33,9 +33,6 @@ local fresh_install = packer_ensure_install()
 vim.cmd("packadd packer.nvim")
 
 local packer = require("packer")
-if fresh_install then
-  packer.sync()
-end
 local packer_util = require("packer.util")
 
 -- check if firenvim is active
