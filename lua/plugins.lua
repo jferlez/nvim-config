@@ -35,6 +35,10 @@ vim.cmd("packadd packer.nvim")
 local packer = require("packer")
 local packer_util = require("packer.util")
 
+if fresh_install then
+  packer.sync()
+end
+
 -- check if firenvim is active
 local firenvim_not_active = function()
   return not vim.g.started_by_firenvim
