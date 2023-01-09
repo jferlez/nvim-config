@@ -23,7 +23,8 @@ local function packer_ensure_install()
   local install_cmd = string.format("!git clone --depth=1 %s %s", packer_repo, packer_dir)
   vim.cmd(install_cmd)
 
-  return true
+  local status, _ = pcall(require, "packer_compiled")
+  return status
 end
 
 
