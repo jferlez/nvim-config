@@ -29,6 +29,8 @@ end
 
 
 local fresh_install = packer_ensure_install()
+print("Is fresh install:")
+print(fresh_install)
 
 -- Load packer.nvim
 vim.cmd("packadd packer.nvim")
