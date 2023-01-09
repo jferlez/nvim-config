@@ -386,6 +386,7 @@ packer.startup {
 if fresh_install then
   -- We run packer.sync() here, because only after packer.startup, can we know which plugins to install.
   -- So plugin installation should be done after the startup process.
+  print("Trying to sync Packer")
   packer.sync()
 else
   local status, _ = pcall(require, "packer_compiled")
