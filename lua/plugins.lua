@@ -13,7 +13,8 @@ local function packer_ensure_install()
   local packer_dir = vim.g.plugin_home .. "/opt/packer.nvim"
 
   if fn.glob(packer_dir) ~= "" then
-    return false
+    local status, _ = pcall(require, "packer_compiled")
+    return false or not status
   end
 
   -- Auto-install packer in case it hasn't been installed.
@@ -23,8 +24,7 @@ local function packer_ensure_install()
   local install_cmd = string.format("!git clone --depth=1 %s %s", packer_repo, packer_dir)
   vim.cmd(install_cmd)
 
-  local status, _ = pcall(require, "packer_compiled")
-  return not status
+  return true
 end
 
 
