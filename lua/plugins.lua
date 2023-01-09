@@ -24,7 +24,7 @@ local function packer_ensure_install()
   vim.cmd(install_cmd)
 
   local status, _ = pcall(require, "packer_compiled")
-  return status
+  return not status
 end
 
 
