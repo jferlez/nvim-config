@@ -161,6 +161,20 @@ end
 --   vim.notify("pyright not found!", vim.log.levels.WARN, {title = 'Nvim-config'})
 -- end
 
+if utils.executable("ltex-ls") then
+  lspconfig.ltex.setup {
+    on_attach = custom_attach,
+    cmd = { "ltex-ls" },
+    filetypes = { "text", "plaintex", "tex", "markdown" },
+    settings = {
+      ltex = {
+        language = "en"
+      },
+    },
+    flags = { debounce_text_changes = 300 },
+}
+end
+
 if utils.executable("clangd") then
   lspconfig.clangd.setup {
     on_attach = custom_attach,
@@ -170,8 +184,6 @@ if utils.executable("clangd") then
       debounce_text_changes = 500,
     },
   }
-else
-  vim.notify("clangd not found!", vim.log.levels.WARN, { title = "Nvim-config" })
 end
 
 -- set up vim-language-server
@@ -196,8 +208,8 @@ if utils.executable("bash-language-server") then
 end
 
 if utils.executable("lua-language-server") then
-  -- settings for lua-language-server can be found on https://github.com/sumneko/lua-language-server/wiki/Settings .
-  lspconfig.sumneko_lua.setup {
+  -- settings for lua-language-server can be found on https://github.com/LuaLS/lua-language-server/wiki/Settings .
+  lspconfig.lua_ls.setup {
     on_attach = custom_attach,
     settings = {
       Lua = {
@@ -211,8 +223,8 @@ if utils.executable("lua-language-server") then
         },
         workspace = {
           -- Make the server aware of Neovim runtime files,
-          -- see also https://github.com/sumneko/lua-language-server/wiki/Libraries#link-to-workspace .
-          -- Lua-dev.nvim also has similar settings for sumneko lua, https://github.com/folke/lua-dev.nvim/blob/main/lua/lua-dev/sumneko.lua .
+          -- see also https://github.com/LuaLS/lua-language-server/wiki/Libraries#link-to-workspace .
+          -- Lua-dev.nvim also has similar settings for lua ls, https://github.com/folke/neodev.nvim/blob/main/lua/neodev/luals.lua .
           library = {
             fn.stdpath("data") .. "/site/pack/packer/opt/emmylua-nvim",
             fn.stdpath("config"),
