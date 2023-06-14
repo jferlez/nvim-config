@@ -44,9 +44,6 @@ end
 
 packer.startup {
   function(use)
-    -- it is recommended to put impatient.nvim before any other plugins
-    use { "lewis6991/impatient.nvim", config = [[require('impatient')]] }
-
     use { "wbthomason/packer.nvim", opt = true }
 
     use { "onsails/lspkind-nvim", event = "VimEnter" }
@@ -154,7 +151,7 @@ packer.startup {
       config = [[require('config.bufferline')]] }
 
     -- fancy start screen
-    use { "glepnir/dashboard-nvim", event = "VimEnter",
+    use { "nvimdev/dashboard-nvim", event = "VimEnter",
       cond = firenvim_not_active,
       config = [[require('config.dashboard-nvim')]]
     }
