@@ -9,14 +9,14 @@
 -- Blog: https://jdhao.github.io/
 -- GitHub: https://github.com/jdhao
 -- StackOverflow: https://stackoverflow.com/users/6064933/jdhao
-vim.loader.enable()
+-- vim.loader.enable()
 
 local api = vim.api
 local version = vim.version
 
 -- check if we have the latest stable version of nvim
 local expected_ver = "0.9.1"
-local ev = version.parse(expected_ver)
+-- local ev = version.parse(expected_ver)
 local actual_ver = version()
 
 if false and version.cmp(ev, actual_ver) ~= 0 then
