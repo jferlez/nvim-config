@@ -393,3 +393,5 @@ endfunction
 
 """"""""""""""""""""""""""""""vim-auto-save settings""""""""""""""""""""""""""""""
 let g:auto_save = 1  " enable AutoSave on Vim startup
+
+let g:obsession_no_bufenter = 1 " Improve performance of Obsession session manager
