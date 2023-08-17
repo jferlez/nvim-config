@@ -6,6 +6,18 @@ local diagnostic = vim.diagnostic
 
 local utils = require("utils")
 
+-- set quickfix list from diagnostics in a certain buffer, not the whole workspace
+local set_qflist = function(buf_num, severity)
+  local diagnostics = nil
+  diagnostics = diagnostic.get(buf_num, { severity = severity })
+
+  local qf_items = diagnostic.toqflist(diagnostics)
+  vim.fn.setqflist({}, ' ', { title = 'Diagnostics', items = qf_items })
+
+  -- open quickfix by default
+  vim.cmd[[copen]]
+end
+
 local custom_attach = function(client, bufnr)
   -- Mappings.
   -- local map = function(mode, l, r, opts)
@@ -129,17 +141,40 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 local lspconfig = require("lspconfig")
 
 if utils.executable("pylsp") then
+  local venv_path = os.getenv('VIRTUAL_ENV')
+  local py_path = nil
+  -- decide which python executable to use for mypy
+  if venv_path ~= nil then
+    py_path = venv_path .. "/bin/python3"
+  else
+    py_path = vim.g.python3_host_prog
+  end
+
   lspconfig.pylsp.setup {
     on_attach = custom_attach,
     settings = {
       pylsp = {
         plugins = {
-          pylint = { enabled = false, executable = "pylint" },
+          -- formatter options
+          black = { enabled = true },
+          autopep8 = { enabled = false },
+          yapf = { enabled = false },
+          -- linter options
+          pylint = { enabled = true, executable = "pylint" },
+          ruff = { enabled = false },
           pyflakes = { enabled = false },
           pycodestyle = { enabled = false },
+          -- type checker
+          pylsp_mypy = {
+            enabled = true,
+            overrides = { "--python-executable", py_path, true },
+            report_progress = true,
+            live_mode = false
+          },
+          -- auto-completion options
           jedi_completion = { fuzzy = true },
-          pyls_isort = { enabled = true },
-          pylsp_mypy = { enabled = true },
+          -- import sorting
+          isort = { enabled = true },
         },
       },
     },
@@ -239,10 +274,10 @@ if utils.executable("lua-language-server") then
 end
 
 -- Change diagnostic signs.
-fn.sign_define("DiagnosticSignError", { text = "✗", texthl = "DiagnosticSignError" })
-fn.sign_define("DiagnosticSignWarn", { text = "!", texthl = "DiagnosticSignWarn" })
-fn.sign_define("DiagnosticSignInformation", { text = "", texthl = "DiagnosticSignInfo" })
-fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+fn.sign_define("DiagnosticSignError", { text = '🆇', texthl = "DiagnosticSignError" })
+fn.sign_define("DiagnosticSignWarn", { text = '⚠️', texthl = "DiagnosticSignWarn" })
+fn.sign_define("DiagnosticSignInfo", { text = 'ℹ️', texthl = "DiagnosticSignInfo" })
+fn.sign_define("DiagnosticSignHint", { text = '', texthl = "DiagnosticSignHint" })
 
 -- global config for diagnostic
 diagnostic.config {

@@ -42,7 +42,7 @@ let g:Lf_UseMemoryCache = 0
 
 " Ignore certain files and directories when searching files
 let g:Lf_WildIgnore = {
-  \ 'dir': ['.git', '__pycache__', '.DS_Store'],
+  \ 'dir': ['.git', '__pycache__', '.DS_Store', '*_cache'],
   \ 'file': ['*.exe', '*.dll', '*.so', '*.o', '*.pyc', '*.jpg', '*.png',
   \ '*.gif', '*.svg', '*.ico', '*.db', '*.tgz', '*.tar.gz', '*.gz',
   \ '*.zip', '*.bin', '*.pptx', '*.xlsx', '*.docx', '*.pdf', '*.tmp',
@@ -108,6 +108,20 @@ let g:Lf_PopupColorscheme = 'gruvbox_material'
 " Change keybinding in LeaderF prompt mode, use ctrl-n and ctrl-p to navigate
 " items.
 let g:Lf_CommandMap = {'<C-J>': ['<C-N>'], '<C-K>': ['<C-P>']}
+
+" do not preview results, it will add the file to buffer list
+let g:Lf_PreviewResult = {
+      \ 'File': 0,
+      \ 'Buffer': 0,
+      \ 'Mru': 0,
+      \ 'Tag': 0,
+      \ 'BufTag': 1,
+      \ 'Function': 1,
+      \ 'Line': 0,
+      \ 'Colorscheme': 0,
+      \ 'Rg': 0,
+      \ 'Gtags': 0
+      \}
 
 """"""""""""""""""""""""""""open-browser.vim settings"""""""""""""""""""
 if g:is_win || g:is_mac
