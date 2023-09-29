@@ -20,13 +20,15 @@ local firenvim_not_active = function()
   return not vim.g.started_by_firenvim
 end
 
-require("lazy").setup {
-  { "onsails/lspkind-nvim", lazy = true },
+local plugin_specs = {
   -- auto-completion engine
   {
     "hrsh7th/nvim-cmp",
+    -- event = 'InsertEnter',
+    event = "VeryLazy",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
+      "onsails/lspkind-nvim",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-omni",
@@ -38,9 +40,9 @@ require("lazy").setup {
     end,
   },
 
-  -- nvim-lsp configuration (it relies on cmp-nvim-lsp, so it should be loaded after cmp-nvim-lsp).
   {
     "neovim/nvim-lspconfig",
+    event = { "BufRead", "BufNewFile" },
     config = function()
       require("config.lsp")
     end,
@@ -54,7 +56,7 @@ require("lazy").setup {
       end
       return false
     end,
-    event = "BufEnter",
+    event = "VeryLazy",
     build = ":TSUpdate",
     config = function()
       require("config.treesitter")
@@ -67,7 +69,7 @@ require("lazy").setup {
   -- Python-related text object
   { "jeetsukumaran/vim-pythonsense", ft = { "python" } },
 
-  { "machakann/vim-swap", event = "VimEnter" },
+  { "machakann/vim-swap", event = "VeryLazy" },
 
   -- IDE for Lisp
   -- 'kovisoft/slimv'
@@ -87,8 +89,8 @@ require("lazy").setup {
 
   -- Super fast buffer jump
   {
-    "phaazon/hop.nvim",
-    event = "VimEnter",
+    "smoka7/hop.nvim",
+    event = "VeryLazy",
     config = function()
       vim.defer_fn(function()
         require("config.nvim_hop")
@@ -124,26 +126,25 @@ require("lazy").setup {
   },
 
   -- A list of colorscheme plugin you may want to try. Find what suits you.
-  { "navarasu/onedark.nvim" },
-  { "sainnhe/edge" },
-  { "sainnhe/sonokai" },
-  { "sainnhe/gruvbox-material" },
-  { "shaunsingh/nord.nvim" },
-  { "sainnhe/everforest" },
-  { "EdenEast/nightfox.nvim" },
-  { "rebelot/kanagawa.nvim" },
-  { "catppuccin/nvim", name = "catppuccin" },
-  { "rose-pine/neovim", name = "rose-pine" },
-  { "olimorris/onedarkpro.nvim" },
-  { "tanvirtin/monokai.nvim" },
-  { "marko-cerovac/material.nvim" },
+  { "navarasu/onedark.nvim", lazy = true },
+  { "sainnhe/edge", lazy = true },
+  { "sainnhe/sonokai", lazy = true },
+  { "sainnhe/gruvbox-material", lazy = true },
+  { "shaunsingh/nord.nvim", lazy = true },
+  { "sainnhe/everforest", lazy = true },
+  { "EdenEast/nightfox.nvim", lazy = true },
+  { "rebelot/kanagawa.nvim", lazy = true },
+  { "catppuccin/nvim", name = "catppuccin", lazy = true },
+  { "olimorris/onedarkpro.nvim", lazy = true },
+  { "tanvirtin/monokai.nvim", lazy = true },
+  { "marko-cerovac/material.nvim", lazy = true },
   { "folke/tokyonight.nvim" },
 
-  { "nvim-tree/nvim-web-devicons", event = "VimEnter" },
+  { "nvim-tree/nvim-web-devicons", event = "VeryLazy" },
 
   {
     "nvim-lualine/lualine.nvim",
-    event = "VimEnter",
+    event = "VeryLazy",
     cond = firenvim_not_active,
     config = function()
       require("config.statusline")
@@ -152,7 +153,7 @@ require("lazy").setup {
 
   {
     "akinsho/bufferline.nvim",
-    event = "VimEnter",
+    event = { "BufEnter" },
     cond = firenvim_not_active,
     config = function()
       require("config.bufferline")
@@ -162,7 +163,6 @@ require("lazy").setup {
   -- fancy start screen
   {
     "nvimdev/dashboard-nvim",
-    event = "VimEnter",
     cond = firenvim_not_active,
     config = function()
       require("config.dashboard-nvim")
@@ -171,19 +171,20 @@ require("lazy").setup {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    event = "VimEnter",
+    event = "VeryLazy",
+    main = 'ibl',
     config = function()
       require("config.indent-blankline")
     end,
   },
 
   -- Highlight URLs inside vim
-  { "itchyny/vim-highlighturl", event = "VimEnter" },
+  { "itchyny/vim-highlighturl", event = "VeryLazy" },
 
   -- notification plugin
   {
     "rcarriga/nvim-notify",
-    event = "BufEnter",
+    event = "VeryLazy",
     config = function()
       vim.defer_fn(function()
         require("config.nvim-notify")
@@ -202,7 +203,7 @@ require("lazy").setup {
         return false
       end
     end,
-    event = "VimEnter",
+    event = "VeryLazy",
   },
 
   -- Only install these plugins if ctags are installed on the system
@@ -228,7 +229,7 @@ require("lazy").setup {
   { "Raimondi/delimitMate", event = "InsertEnter" },
 
   -- Comment plugin
-  { "tpope/vim-commentary", event = "VimEnter" },
+  { "tpope/vim-commentary", event = "VeryLazy" },
 
   -- Multiple cursor plugin like Sublime Text?
   -- 'mg979/vim-visual-multi'
@@ -245,6 +246,7 @@ require("lazy").setup {
   -- Manage your yank history
   {
     "gbprod/yanky.nvim",
+    cmd = { "YankyRingHistory" },
     config = function()
       require("config.yanky")
     end,
@@ -254,7 +256,7 @@ require("lazy").setup {
   { "tpope/vim-eunuch", cmd = { "Rename", "Delete" } },
 
   -- Repeat vim motions
-  { "tpope/vim-repeat", event = "VimEnter" },
+  { "tpope/vim-repeat", event = "VeryLazy" },
 
   { "nvim-zh/better-escape.vim", event = { "InsertEnter" } },
 
@@ -362,17 +364,17 @@ require("lazy").setup {
     ft = { "markdown" },
   },
 
-  { "chrisbra/unicode.vim", event = "VimEnter" },
+  { "chrisbra/unicode.vim", event = "VeryLazy" },
 
   -- Additional powerful text object for vim, this plugin should be studied
   -- carefully to use its full power
-  { "wellle/targets.vim", event = "VimEnter" },
+  { "wellle/targets.vim", event = "VeryLazy" },
 
   -- Plugin to manipulate character pairs quickly
-  { "machakann/vim-sandwich", event = "VimEnter" },
+  { "machakann/vim-sandwich", event = "VeryLazy" },
 
   -- Add indent object for vim (useful for languages like Python)
-  { "michaeljsmith/vim-indent-object", event = "VimEnter" },
+  { "michaeljsmith/vim-indent-object", event = "VeryLazy" },
 
   -- Only use these plugin on Windows and Mac and when LaTeX is installed
   {
@@ -401,7 +403,7 @@ require("lazy").setup {
   },
 
   -- Modern matchit implementation
-  { "andymass/vim-matchup", event = "VimEnter" },
+  { "andymass/vim-matchup", event = "BufRead" },
   { "tpope/vim-scriptease", cmd = { "Scriptnames", "Message", "Verbose" } },
 
   -- Asynchronous command execution
@@ -451,12 +453,15 @@ require("lazy").setup {
   },
 
   -- The missing auto-completion for cmdline!
-  { "gelguy/wilder.nvim" },
+  {
+    "gelguy/wilder.nvim",
+    build = ":UpdateRemotePlugins",
+  },
 
   -- showing keybindings
   {
     "folke/which-key.nvim",
-    event = "VimEnter",
+    event = "VeryLazy",
     config = function()
       vim.defer_fn(function()
         require("config.which-key")
@@ -465,11 +470,12 @@ require("lazy").setup {
   },
 
   -- show and trim trailing whitespaces
-  { "jdhao/whitespace.nvim", event = "VimEnter" },
+  { "jdhao/whitespace.nvim", event = "VeryLazy" },
 
   -- file explorer
   {
     "nvim-tree/nvim-tree.lua",
+    keys = { "<space>s" },
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("config.nvim-tree")
@@ -479,9 +485,21 @@ require("lazy").setup {
   { "ii14/emmylua-nvim", ft = "lua" },
   {
     "j-hui/fidget.nvim",
+    event = "VeryLazy",
     tag = "legacy",
     config = function()
       require("config.fidget-nvim")
     end,
   },
 }
+
+-- configuration for lazy itself.
+local lazy_opts = {
+  ui = {
+    border = "rounded",
+    title = "Plugin Manager",
+    title_pos = "center",
+  },
+}
+
+require("lazy").setup(plugin_specs, lazy_opts)
