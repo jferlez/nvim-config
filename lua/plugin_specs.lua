@@ -63,6 +63,8 @@ local plugin_specs = {
     end,
   },
 
+  { "SirVer/ultisnips", ft = { "python" } },
+
   -- Python indent (follows the PEP8 style)
   { "Vimjas/vim-python-pep8-indent", ft = { "python" } },
 
