@@ -57,7 +57,7 @@ M.colorscheme_conf = {
     vim.cmd('colorscheme material')
   end,
   tokyonight = function()
-    vim.cmd('colorscheme tokyonight')
+    vim.cmd([[colorscheme tokyonight]])
   end,
 }
 
@@ -84,5 +84,5 @@ end
 
 -- Load a random colorscheme
 -- M.rand_colorscheme()
-M.tokyonight()
+M.colorscheme_conf["tokyonight"]()
 
