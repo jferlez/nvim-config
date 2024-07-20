@@ -2,8 +2,7 @@ local utils = require("utils")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
-
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system {
     "git",
     "clone",
@@ -124,19 +123,20 @@ local plugin_specs = {
       "nvim-telescope/telescope-symbols.nvim",
     },
   },
-
+  {
+    "lukas-reineke/headlines.nvim",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    config = true, -- or `opts = {}`
+  },
   -- A list of colorscheme plugin you may want to try. Find what suits you.
   { "navarasu/onedark.nvim", lazy = true },
   { "sainnhe/edge", lazy = true },
   { "sainnhe/sonokai", lazy = true },
   { "sainnhe/gruvbox-material", lazy = true },
-  { "shaunsingh/nord.nvim", lazy = true },
   { "sainnhe/everforest", lazy = true },
   { "EdenEast/nightfox.nvim", lazy = true },
-  { "rebelot/kanagawa.nvim", lazy = true },
   { "catppuccin/nvim", name = "catppuccin", lazy = true },
   { "olimorris/onedarkpro.nvim", lazy = true },
-  { "tanvirtin/monokai.nvim", lazy = true },
   { "marko-cerovac/material.nvim", lazy = true },
   { "folke/tokyonight.nvim" },
 
@@ -224,7 +224,11 @@ local plugin_specs = {
   }, event = "InsertEnter" },
 
   -- Automatic insertion and deletion of a pair of characters
-  { "Raimondi/delimitMate", event = "InsertEnter" },
+  {
+      'windwp/nvim-autopairs',
+      event = "InsertEnter",
+      config = true
+  },
 
   -- Comment plugin
   { "tpope/vim-commentary", event = "VeryLazy" },
@@ -294,7 +298,7 @@ local plugin_specs = {
 
   -- Better git log display
   { "rbong/vim-flog", cmd = { "Flog" } },
-  { "christoomey/vim-conflicted", cmd = { "Conflicted" } },
+  { "akinsho/git-conflict.nvim", version = "*", config = true },
   {
     "ruifm/gitlinker.nvim",
     event = "User InGitRepo",
@@ -483,7 +487,6 @@ local plugin_specs = {
     end,
   },
 
-  { "ii14/emmylua-nvim", ft = "lua" },
   {
     "j-hui/fidget.nvim",
     event = "VeryLazy",
