@@ -11,38 +11,57 @@
 -- StackOverflow: https://stackoverflow.com/users/6064933/jdhao
 -- vim.loader.enable()
 
-local version = vim.version
+local utils = require("utils")
 
--- check if we have the latest stable version of nvim
-local expected_ver = "0.9.2"
--- local ev = version.parse(expected_ver)
-local actual_ver = version()
+-- -- check if we have the latest stable version of nvim
+-- local expected_ver = "0.9.2"
+-- -- local ev = version.parse(expected_ver)
+-- local actual_ver = version()
 
-if false and version.cmp(ev, actual_ver) ~= 0 then
-  local _ver = string.format("%s.%s.%s", actual_ver.major, actual_ver.minor, actual_ver.patch)
-  local msg = string.format("Expect nvim %s, but got %s instead. Use at your own risk!", expected_ver, _ver)
-  vim.api.nvim_err_writeln(msg)
-end
+-- if false and version.cmp(ev, actual_ver) ~= 0 then
+--   local _ver = string.format("%s.%s.%s", actual_ver.major, actual_ver.minor, actual_ver.patch)
+--   local msg = string.format("Expect nvim %s, but got %s instead. Use at your own risk!", expected_ver, _ver)
+--   vim.api.nvim_err_writeln(msg)
+-- end
 
-local core_conf_files = {
-  "globals.lua", -- some global settings
-  "options.vim", -- setting options in nvim
-  "autocommands.vim", -- various autocommands
-  "mappings.lua", -- all the user-defined mappings
-  "plugins.vim", -- all the plugins installed and their configurations
-  "colorschemes.lua", -- colorscheme settings
-}
+-- local core_conf_files = {
+--   "globals.lua", -- some global settings
+--   "options.vim", -- setting options in nvim
+--   "autocommands.vim", -- various autocommands
+--   "mappings.lua", -- all the user-defined mappings
+--   "plugins.vim", -- all the plugins installed and their configurations
+--   "colorschemes.lua", -- colorscheme settings
+-- }
 
-local viml_conf_dir = vim.fn.stdpath("config") .. "/viml_conf"
--- source all the core config files
-for _, file_name in ipairs(core_conf_files) do
-  if vim.endswith(file_name, 'vim') then
-    local path = string.format("%s/%s", viml_conf_dir, file_name)
-    local source_cmd = "source " .. path
-    vim.cmd(source_cmd)
-  else
-    local module_name, _ = string.gsub(file_name, "%.lua", "")
-    package.loaded[module_name] = nil
-    require(module_name)
-  end
-end
+-- local viml_conf_dir = vim.fn.stdpath("config") .. "/viml_conf"
+-- -- source all the core config files
+-- for _, file_name in ipairs(core_conf_files) do
+--   if vim.endswith(file_name, 'vim') then
+--     local path = string.format("%s/%s", viml_conf_dir, file_name)
+--     local source_cmd = "source " .. path
+--     vim.cmd(source_cmd)
+--   else
+--     local module_name, _ = string.gsub(file_name, "%.lua", "")
+--     package.loaded[module_name] = nil
+--     require(module_name)
+--   end
+-- end
+
+local expected_version = "0.9.2"
+utils.is_compatible_version(expected_version)
+
+local config_dir = vim.fn.stdpath("config")
+---@cast config_dir string
+
+-- some global settings
+require("globals")
+-- setting options in nvim
+vim.cmd("source " .. vim.fs.joinpath(config_dir, "viml_conf/options.vim"))
+-- various autocommands
+require("custom-autocmd")
+-- all the user-defined mappings
+require("mappings")
+-- all the plugins installed and their configurations
+vim.cmd("source ".. vim.fs.joinpath(config_dir, "viml_conf/plugins.vim"))
+-- colorscheme settings
+require("colorschemes")

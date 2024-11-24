@@ -24,9 +24,9 @@ M.colorscheme_conf = {
   end,
   gruvbox_material = function()
     -- foreground option can be material, mix, or original
-    vim.g.gruvbox_material_foreground = "material"
+    vim.g.gruvbox_material_foreground = "original"
     --background option can be hard, medium, soft
-    vim.g.gruvbox_material_background = "soft"
+    vim.g.gruvbox_material_background = "medium"
     vim.g.gruvbox_material_enable_italic = 1
     vim.g.gruvbox_material_better_performance = 1
 
@@ -59,6 +59,12 @@ M.colorscheme_conf = {
   tokyonight = function()
     vim.cmd([[colorscheme tokyonight]])
   end,
+  arctic = function ()
+    vim.cmd("colorscheme arctic")
+  end,
+  kanagawa = function()
+    vim.cmd("colorscheme kanagawa-wave")
+  end
 }
 
 --- Use a random colorscheme from the pre-defined list of colorschemes.

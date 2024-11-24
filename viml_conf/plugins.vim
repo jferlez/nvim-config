@@ -58,16 +58,6 @@ endif
 " Only fuzzy-search files names
 let g:Lf_DefaultMode = 'FullPath'
 
-" Popup window settings
-let w = float2nr(&columns * 0.8)
-if w > 140
-  let g:Lf_PopupWidth = 140
-else
-  let g:Lf_PopupWidth = w
-endif
-
-let g:Lf_PopupPosition = [0, float2nr((&columns - g:Lf_PopupWidth)/2)]
-
 " Do not use version control tool to list files under a directory since
 " submodules are not searched by default.
 let g:Lf_UseVersionControlTool = 0
@@ -89,7 +79,7 @@ let g:Lf_WorkingDirectoryMode = 'a'
 nnoremap <silent> <leader>ff :<C-U>Leaderf file --popup<CR>
 
 " Grep project files in popup window
-nnoremap <silent> <leader>fg :<C-U>Leaderf rg --no-messages --popup<CR>
+nnoremap <silent> <leader>fg :<C-U>Leaderf rg --no-messages --popup  --nameOnly<CR>
 
 " Search vim help files
 nnoremap <silent> <leader>fh :<C-U>Leaderf help --popup<CR>
@@ -122,16 +112,6 @@ let g:Lf_PreviewResult = {
       \ 'Rg': 0,
       \ 'Gtags': 0
       \}
-
-""""""""""""""""""""""""""""open-browser.vim settings"""""""""""""""""""
-if g:is_win || g:is_mac
-  " Disable netrw's gx mapping.
-  let g:netrw_nogx = 1
-
-  " Use another mapping for the open URL method
-  nmap ob <Plug>(openbrowser-smart-search)
-  xmap ob <Plug>(openbrowser-smart-search)
-endif
 
 """"""""""""""""""""""""""" vista settings """"""""""""""""""""""""""""""""""
 let g:vista#renderer#icons = {
