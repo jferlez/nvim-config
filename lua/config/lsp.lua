@@ -128,7 +128,7 @@ local custom_attach = function(client, bufnr)
       vim.b.diagnostics_pos = cursor_pos
     end,
     {}
-  )
+  })
 
 
   -- The blow command will highlight the current variable and its usages in the buffer.
