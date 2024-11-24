@@ -103,9 +103,8 @@ local custom_attach = function(client, bufnr)
   -- but disable this feature by default, so you may need to enable inlay hint in the LSP server config.
   -- vim.lsp.inlay_hint.enable(true, {buffer=bufnr})
 
-  api.nvim_create_autocmd("LF", {
-    buffer = bufnr,
-    callback = function()
+  api.nvim_create_user_command("LF",
+    function()
       local float_opts = {
         focusable = false,
         close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
@@ -128,7 +127,7 @@ local custom_attach = function(client, bufnr)
       vim.b.diagnostics_pos = cursor_pos
     end,
     {}
-  })
+  )
 
 
   -- The blow command will highlight the current variable and its usages in the buffer.
