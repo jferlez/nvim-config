@@ -28,8 +28,6 @@ local custom_attach = function(client, bufnr)
   --   keymap.set(mode, l, r, opts)
   -- end
 
-<<<<<<< HEAD
-
   -- map("n", "gd", vim.lsp.buf.definition, { desc = "go to definition" })
   -- map("n", "<C-]>", vim.lsp.buf.definition)
   -- map("n", "K", vim.lsp.buf.hover)
