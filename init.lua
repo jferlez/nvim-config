@@ -47,7 +47,7 @@ local utils = require("utils")
 --   end
 -- end
 
-local expected_version = "0.9.2"
+local expected_version = "0.11.0"
 utils.is_compatible_version(expected_version)
 
 local config_dir = vim.fn.stdpath("config")
