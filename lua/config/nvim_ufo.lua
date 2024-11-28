@@ -30,8 +30,15 @@ local handler = function(virtText, lnum, endLnum, width, truncate)
   return newVirtText
 end
 
+local ftMap = {
+    python = ''
+}
+
 require("ufo").setup {
   fold_virt_text_handler = handler,
+  provider_selector = function(bufnr, filetype)
+        return ftMap[filetype]
+  end,
 }
 
 vim.keymap.set("n", "zR", require("ufo").openAllFolds)
