@@ -23,7 +23,7 @@ endfunction
 function! s:log(message)
   silent execute '!echo "'
         \ . strftime('%T', localtime()) . ' - ' . a:message . '"'
-        \ '>> /tmp/vim_log_autocommands'
+        \ '>> ~/vim_log_autocommands'
 endfunction
 
 " These are deliberately left out due to side effects
