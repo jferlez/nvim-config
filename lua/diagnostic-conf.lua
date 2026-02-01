@@ -47,23 +47,45 @@ vim.keymap.set("n", "<space>qb", function()
 end, { desc = "put buffer diagnostics to qf" })
 
 -- automatically show diagnostic in float win for current line
-api.nvim_create_autocmd("CursorHold", {
-  pattern = "*",
-  callback = function()
+-- api.nvim_create_autocmd("CursorHold", {
+--   pattern = "*",
+--   callback = function()
+--     if #vim.diagnostic.get(0) == 0 then
+--       return
+--     end
+
+--     if not vim.b.diagnostics_pos then
+--       vim.b.diagnostics_pos = { nil, nil }
+--     end
+
+--     local cursor_pos = api.nvim_win_get_cursor(0)
+
+--     -- if not vim.deep_equal(cursor_pos, vim.b.diagnostics_pos) then
+--     --   diagnostic.open_float {}
+--     -- end
+
+--     vim.b.diagnostics_pos = cursor_pos
+--   end,
+-- })
+
+
+api.nvim_create_user_command("LF",
+  function()
+    local float_opts = {
+        focusable = false,
+        close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+        border = "rounded",
+        source = "always", -- show source in diagnostic popup window
+        prefix = " ",
+    }
     if #vim.diagnostic.get(0) == 0 then
       return
     end
 
-    if not vim.b.diagnostics_pos then
-      vim.b.diagnostics_pos = { nil, nil }
-    end
-
     local cursor_pos = api.nvim_win_get_cursor(0)
 
-    if not vim.deep_equal(cursor_pos, vim.b.diagnostics_pos) then
-      diagnostic.open_float {}
-    end
+    diagnostic.open_float(nil, float_opts)
 
-    vim.b.diagnostics_pos = cursor_pos
   end,
-})
+  {}
+)
