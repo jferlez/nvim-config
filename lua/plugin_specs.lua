@@ -39,7 +39,10 @@ local plugin_specs = {
   -- {
   --   "saghen/blink.cmp",
   --   -- optional: provides snippets for the snippet source
-  --   dependencies = { "rafamadriz/friendly-snippets" },
+  --   dependencies = {
+  --     "rafamadriz/friendly-snippets",
+  --     "archie-judd/blink-cmp-words",
+  --   },
   --   -- use a release tag to download pre-built binaries
   --   version = "1.*",
   --   config = function()
@@ -49,9 +52,6 @@ local plugin_specs = {
   -- },
   {
     "neovim/nvim-lspconfig",
-    config = function()
-      require("config.lsp")
-    end,
   },
   {
     "dnlhc/glance.nvim",
@@ -62,8 +62,9 @@ local plugin_specs = {
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    lazy = true,
+    lazy = false,
     build = ":TSUpdate",
+    branch = "main",
     config = function()
       require("config.treesitter")
     end,
@@ -71,7 +72,18 @@ local plugin_specs = {
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = "VeryLazy",
-    branch = "master",
+    branch = "main",
+    init = function()
+      -- Disable entire built-in ftplugin mappings to avoid conflicts.
+      -- See https://github.com/neovim/neovim/tree/master/runtime/ftplugin for built-in ftplugins.
+      vim.g.no_plugin_maps = true
+
+      -- Or, disable per filetype (add as you like)
+      -- vim.g.no_python_maps = true
+      -- vim.g.no_ruby_maps = true
+      -- vim.g.no_rust_maps = true
+      -- vim.g.no_go_maps = true
+    end,
     config = function()
       require("config.treesitter-textobjects")
     end,
@@ -137,13 +149,16 @@ local plugin_specs = {
   { "miikanissi/modus-themes.nvim", priority = 1000 },
   { "wtfox/jellybeans.nvim", priority = 1000 },
   { "projekt0n/github-nvim-theme", name = "github-theme" },
-  { "e-ink-colorscheme/e-ink.nvim", priority = 1000 },
   { "ficcdaf/ashen.nvim", priority = 1000 },
   { "savq/melange-nvim", priority = 1000 },
   { "Skardyy/makurai-nvim", priority = 1000 },
   { "vague2k/vague.nvim", priority = 1000 },
   { "webhooked/kanso.nvim", priority = 1000 },
   { "zootedb0t/citruszest.nvim", priority = 1000 },
+  {
+    "nyoom-engineering/oxocarbon.nvim",
+    priority = 1000,
+  },
 
   -- plugins to provide nerdfont icons
   {
@@ -172,15 +187,6 @@ local plugin_specs = {
     cond = firenvim_not_active,
     config = function()
       require("config.bufferline")
-    end,
-  },
-
-  -- fancy start screen
-  {
-    "nvimdev/dashboard-nvim",
-    cond = firenvim_not_active,
-    config = function()
-      require("config.dashboard-nvim")
     end,
   },
 
@@ -294,9 +300,6 @@ local plugin_specs = {
         let g:UltiSnipsSnippetDirectories=['UltiSnips', 'my_snippets']
       ]])
     end,
-    dependencies = {
-      "honza/vim-snippets",
-    },
     event = "InsertEnter",
   },
 
@@ -387,14 +390,6 @@ local plugin_specs = {
   -- Better git log display
   { "rbong/vim-flog", cmd = { "Flog" } },
   {
-    "akinsho/git-conflict.nvim",
-    version = "*",
-    event = "VeryLazy",
-    config = function()
-      require("config.git-conflict")
-    end,
-  },
-  {
     "ruifm/gitlinker.nvim",
     event = "User InGitRepo",
     config = function()
@@ -415,6 +410,27 @@ local plugin_specs = {
   {
     "sindrets/diffview.nvim",
     cmd = { "DiffviewOpen" },
+    config = function()
+      require("config.diffview")
+    end,
+  },
+
+  {
+    "barrettruth/diffs.nvim",
+    init = function()
+      vim.g.diffs = {
+        integrations = {
+          fugitive = true,
+          neogit = true,
+          gitsigns = true,
+        },
+      }
+    end,
+  },
+
+  {
+    "esmuellert/codediff.nvim",
+    cmd = "CodeDiff",
   },
 
   {
@@ -673,18 +689,10 @@ local plugin_specs = {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
-    opts = {
-      -- more beautiful vim.ui.input
-      input = {
-        enabled = true,
-        win = {
-          relative = "cursor",
-          backdrop = true,
-        },
-      },
-      -- more beautiful vim.ui.select
-      picker = { enabled = true },
-    },
+    opts = {},
+    config = function()
+      require("config.snacks")
+    end,
   },
   -- show and trim trailing whitespaces
   { "jdhao/whitespace.nvim", event = "VeryLazy" },
@@ -713,26 +721,9 @@ local plugin_specs = {
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        { path = "nvim-lspconfig", words = { "lspconfig" } },
       },
     },
-  },
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    dependencies = {
-      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-    },
-    opts = {
-      debug = true, -- Enable debugging
-      -- See Configuration section for rest
-    },
-    cmd = { "CopilotChat" },
-  },
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    config = function()
-      require("copilot").setup {}
-    end,
   },
   {
     "smjonas/live-command.nvim",
@@ -767,7 +758,42 @@ local plugin_specs = {
     event = "FileType qf",
     ---@module "quicker"
     ---@type quicker.SetupOptions
-    opts = {},
+    opts = {
+      max_filename_width = function()
+        return math.floor(math.min(40, vim.o.columns / 2))
+      end,
+    },
+  },
+  {
+    "nickjvandyke/opencode.nvim",
+    config = function()
+      ---@module "opencode"
+      ---@type opencode.Opts
+      vim.g.opencode_opts = {
+        -- Your configuration, if any — see `lua/opencode/config.lua`, or "goto definition" on the type or field.
+      }
+
+      -- Required for `opts.events.reload`.
+      vim.o.autoread = true
+    end,
+  },
+  {
+    "RRethy/vim-illuminate",
+    event = "VeryLazy",
+    config = function()
+      require("illuminate").configure {
+        filetypes_denylist = {},
+        filetypes_allowlist = {
+          "lua",
+          "python",
+          "sh",
+          "yaml",
+          "json",
+          "toml",
+        },
+        min_count_to_highlight = 2,
+      }
+    end,
   },
   {
     'Julian/lean.nvim',
