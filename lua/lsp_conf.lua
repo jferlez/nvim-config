@@ -127,3 +127,4 @@ for server_name, lsp_executable in pairs(enabled_lsp_servers) do
     vim.notify(msg, vim.log.levels.WARN, { title = "Nvim-config" })
   end
 end
+--vim.lsp.log.set_level('debug')
