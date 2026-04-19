@@ -4,7 +4,7 @@ local opt = vim.opt
 opt.wrap = false
 opt.sidescroll = 5
 opt.sidescrolloff = 2
-opt.colorcolumn = "100"
+opt.colorcolumn = ""
 
 opt.tabstop = 4 -- Number of visual spaces per TAB
 opt.softtabstop = 4 -- Number of spaces in tab when editing
