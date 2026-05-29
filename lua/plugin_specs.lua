@@ -88,7 +88,13 @@ local plugin_specs = {
       require("config.treesitter-textobjects")
     end,
   },
-  { "machakann/vim-swap", event = "VeryLazy" },
+  {
+    "mizlan/iswap.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("config.iswap")
+    end,
+  },
 
   -- Super fast buffer jump
   {
@@ -155,10 +161,11 @@ local plugin_specs = {
   { "vague2k/vague.nvim", priority = 1000 },
   { "webhooked/kanso.nvim", priority = 1000 },
   { "zootedb0t/citruszest.nvim", priority = 1000 },
-  {
-    "nyoom-engineering/oxocarbon.nvim",
-    priority = 1000,
-  },
+  { "nyoom-engineering/oxocarbon.nvim", priority = 1000 },
+  { "ember-theme/nvim", name = "ember", priority = 1000 },
+  { "yonatanperel/lake-dweller.nvim", priority = 1000 },
+  { "dchinmay2/alabaster.nvim", priority = 1000 },
+  { "jpwol/thorn.nvim", priority = 1000 },
 
   -- plugins to provide nerdfont icons
   {
@@ -300,7 +307,7 @@ local plugin_specs = {
         let g:UltiSnipsSnippetDirectories=['UltiSnips', 'my_snippets']
       ]])
     end,
-    event = "InsertEnter",
+    event = "VeryLazy",
   },
 
   -- Automatic insertion and deletion of a pair of characters
@@ -695,7 +702,7 @@ local plugin_specs = {
     end,
   },
   -- show and trim trailing whitespaces
-  { "jdhao/whitespace.nvim", event = "VeryLazy" },
+  { "nvim-zh/whitespace.nvim", event = "VeryLazy" },
 
   -- file explorer
   {
@@ -781,18 +788,19 @@ local plugin_specs = {
     "RRethy/vim-illuminate",
     event = "VeryLazy",
     config = function()
-      require("illuminate").configure {
-        filetypes_denylist = {},
-        filetypes_allowlist = {
-          "lua",
-          "python",
-          "sh",
-          "yaml",
-          "json",
-          "toml",
-        },
-        min_count_to_highlight = 2,
-      }
+      require("config.vim-illuminate")
+    end,
+  },
+  {
+    "mfussenegger/nvim-lint",
+    config = function()
+      require("config.nvim-lint")
+    end,
+  },
+  {
+    "xzbdmw/colorful-menu.nvim",
+    config = function()
+      require("config.colorful_menu")
     end,
   },
   {

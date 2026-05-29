@@ -66,6 +66,13 @@ M.colorscheme_conf = {
   end,
   material = function()
     vim.g.material_style = "darker"
+
+    local material = require("material")
+    material.setup {
+      custom_highlights = {
+        Pmenu = { bg = "None", fg = "LightGreen" },
+      },
+    }
     use_theme("material")
   end,
   tokyonight = function()
@@ -107,6 +114,22 @@ M.colorscheme_conf = {
   oxocarbon = function()
     use_theme("oxocarbon")
   end,
+  ember = function()
+    use_theme("ember")
+  end,
+  lake_dweller = function()
+    require("lake-dweller").setup {
+      -- "lake-dweller", "pond-dweller", or "ocean-dweller"
+      variant = "lake-dweller",
+    }
+    use_theme("lake-dweller")
+  end,
+  alabaster = function()
+    use_theme("alabaster")
+  end,
+  thorn = function()
+    use_theme("thorn")
+  end,
 }
 
 --- Use a random colorscheme from the pre-defined list of colorschemes.
@@ -126,5 +149,29 @@ end
 -- Load a random colorscheme
 -- M.rand_colorscheme()
 M.colorscheme_conf["tokyonight"]()
+
+-- enable the experiment UI
+require("vim._core.ui2").enable {
+  enable = true,
+  msg = { -- Options related to the message module.
+    targets = {
+      [""] = "cmd",
+      empty = "msg",
+    },
+    cmd = { -- Options related to messages in the cmdline window.
+      height = 0.2, -- Maximum height while expanded for messages beyond 'cmdheight'.
+    },
+    dialog = { -- Options related to dialog window.
+      height = 0.2, -- Maximum height.
+    },
+    msg = { -- Options related to msg window.
+      height = 0.2, -- Maximum height.
+      timeout = 1000, -- Time a message is visible in the message window.
+    },
+    pager = { -- Options related to message window.
+      height = 0.3, -- Maximum height.
+    },
+  },
+}
 
 return M

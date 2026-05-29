@@ -78,21 +78,18 @@ keymap.set({ "n", "x" }, "L", "g_")
 keymap.set("x", "<", "<gv")
 keymap.set("x", ">", ">gv")
 
--- Edit and reload nvim config file quickly
-keymap.set("n", "<leader>ev", "<cmd>tabnew $MYVIMRC <bar> tcd %:h<cr>", {
-  silent = true,
-  desc = "open init.lua",
-})
-
+-- Restart nvim
 keymap.set("n", "<leader>sv", function()
-  vim.cmd([[
-      update $MYVIMRC
-      source $MYVIMRC
-    ]])
-  vim.notify("Nvim config successfully reloaded!", vim.log.levels.INFO, { title = "nvim-config" })
+  vim.print("Use ZR to restart nvim instead!")
+end)
+
+keymap.set("n", "ZR", function()
+  local current_buf_path = vim.fn.expand("%")
+  local restart_cmd = string.format("restart edit %s", current_buf_path)
+  vim.cmd(restart_cmd)
 end, {
   silent = true,
-  desc = "reload init.lua",
+  desc = "Restart nvim",
 })
 
 -- Reselect the text that has just been pasted, see also https://stackoverflow.com/a/4317090/6064933.
