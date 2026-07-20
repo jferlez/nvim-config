@@ -695,8 +695,10 @@ local plugin_specs = {
   {
     "folke/snacks.nvim",
     priority = 1000,
-    lazy = false,
-    opts = {},
+    lazy = true,
+    opts = {
+      scroll = { enabled = false },
+    },
     config = function()
       require("config.snacks")
     end,
