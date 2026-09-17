@@ -42,9 +42,9 @@ return {
         -- inlay hint settings are provided by pylance?
         inlayHints = {
           callArgumentNames = "partial",
-          functionReturnTypes = true,
-          pytestParameters = true,
-          variableTypes = true,
+          functionReturnTypes = false,
+          pytestParameters = false,
+          variableTypes = false,
         },
       },
     },

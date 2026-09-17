@@ -115,7 +115,7 @@ local enabled_lsp_servers = {
 
   lua_ls = { exe = "lua-language-server", optional = false },
 
-  pyright = { exe = "delance-langserver", optional = false },
+  -- pyright = { exe = "delance-langserver", optional = false },
   ruff = { exe = "ruff", optional = false },
 
   vimls = { exe = "vim-language-server", optional = true },
