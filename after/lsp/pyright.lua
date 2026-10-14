@@ -21,7 +21,7 @@ local new_capability = {
 
 ---@type vim.lsp.Config
 return {
-  -- cmd = { "delance-langserver", "--stdio" },
+  cmd = { "delance-langserver", "--stdio" },
   ---@type lspconfig.settings.pyright
   settings = {
     pyright = {
@@ -33,7 +33,7 @@ return {
       analysis = {
         autoSearchPaths = true,
         diagnosticMode = "workspace",
-        typeCheckingMode = "standard",
+        typeCheckingMode = "off",
         useLibraryCodeForTypes = true,
         -- we can this setting below to redefine some diagnostics
         diagnosticSeverityOverrides = {

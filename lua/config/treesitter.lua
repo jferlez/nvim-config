@@ -4,6 +4,9 @@ local nvim_treesitter = require("nvim-treesitter")
 local ensure_installed = {
   "cpp",
   "diff",
+  "dockerfile",
+  "gitcommit",
+  "gitconfig",
   "go",
   "gomod",
   "gosum",
@@ -13,6 +16,7 @@ local ensure_installed = {
   "markdown",
   "python",
   "sh",
+  "tex",
   "toml",
   "typescript",
   "vim",

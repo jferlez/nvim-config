@@ -1,4 +1,5 @@
 local utils = require("utils")
+local symbol_icon = require("symbol_icon")
 
 local plugin_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy")
 local lazypath = vim.fs.joinpath(plugin_dir, "lazy.nvim")
@@ -20,8 +21,10 @@ local firenvim_not_active = function()
   return not vim.g.started_by_firenvim
 end
 
-local plugin_specs = {
-  -- auto-completion engine
+--- can be `blink` or `nvim-cmp`
+local completion_engine = "blink"
+
+local cmp_plugin_specs = {
   { "hrsh7th/cmp-nvim-lsp", lazy = true },
   { "hrsh7th/cmp-path", lazy = true },
   { "hrsh7th/cmp-buffer", lazy = true },
@@ -36,20 +39,36 @@ local plugin_specs = {
       require("config.nvim-cmp")
     end,
   },
-  -- {
-  --   "saghen/blink.cmp",
-  --   -- optional: provides snippets for the snippet source
-  --   dependencies = {
-  --     "rafamadriz/friendly-snippets",
-  --     "archie-judd/blink-cmp-words",
-  --   },
-  --   -- use a release tag to download pre-built binaries
-  --   version = "1.*",
-  --   config = function()
-  --     require("config.blink-cmp")
-  --   end,
-  --   opts_extend = { "sources.default" },
-  -- },
+}
+
+local blink_plugin_specs = {
+  { "quangnguyen30192/cmp-nvim-ultisnips" },
+  {
+    "saghen/blink.compat",
+    -- use v2.* for blink.cmp v1.*
+    version = "2.*",
+    -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
+    lazy = true,
+    -- make sure to set opts so that lazy.nvim calls blink.compat's setup
+    opts = {},
+  },
+  { "archie-judd/blink-cmp-words", lazy = true },
+  {
+    "saghen/blink.cmp",
+    -- optional: provides snippets for the snippet source
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+    },
+    -- use a release tag to download pre-built binaries
+    version = "1.*",
+    config = function()
+      require("config.blink-cmp")
+    end,
+    opts_extend = { "sources.default" },
+  },
+}
+
+local plugin_specs = {
   {
     "neovim/nvim-lspconfig",
   },
@@ -166,6 +185,7 @@ local plugin_specs = {
   { "yonatanperel/lake-dweller.nvim", priority = 1000 },
   { "dchinmay2/alabaster.nvim", priority = 1000 },
   { "jpwol/thorn.nvim", priority = 1000 },
+  { "VerticalHeretic/AzulejoBrutalism", priority = 1000 },
 
   -- plugins to provide nerdfont icons
   {
@@ -181,7 +201,6 @@ local plugin_specs = {
 
   {
     "nvim-lualine/lualine.nvim",
-    event = "BufRead",
     cond = firenvim_not_active,
     config = function()
       require("config.lualine")
@@ -206,7 +225,7 @@ local plugin_specs = {
         draw = {
           animation = mini_indent.gen_animation.none(),
         },
-        symbol = "▏",
+        symbol = symbol_icon.indent,
       }
     end,
   },
@@ -264,27 +283,15 @@ local plugin_specs = {
     submodules = false, -- not needed, submodules are required only for tests
   },
 
-  -- Only install these plugins if ctags are installed on the system
-  -- show file tags in vim window
   {
-    "liuchengxu/vista.vim",
-    init = function()
-      vim.cmd([[
-        let g:vista#renderer#icons = {
-              \ 'member': '',
-              \ }
-        " Do not echo message on command line
-        let g:vista_echo_cursor = 0
-        " Stay in current window when vista window is opened
-        let g:vista_stay_on_open = 0
-
-        nnoremap <silent> <Space>t :<C-U>Vista!!<CR>
-      ]])
+    "stevearc/aerial.nvim",
+    -- Optional dependencies
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("config.aerial")
     end,
-    enabled = function()
-      return utils.executable("ctags")
-    end,
-    cmd = "Vista",
   },
 
   -- Snippet engine and snippet template
@@ -410,7 +417,7 @@ local plugin_specs = {
     config = function()
       require("config.gitsigns")
     end,
-    event = "BufRead",
+    event = "VeryLazy",
     version = "*",
   },
 
@@ -419,19 +426,6 @@ local plugin_specs = {
     cmd = { "DiffviewOpen" },
     config = function()
       require("config.diffview")
-    end,
-  },
-
-  {
-    "barrettruth/diffs.nvim",
-    init = function()
-      vim.g.diffs = {
-        integrations = {
-          fugitive = true,
-          neogit = true,
-          gitsigns = true,
-        },
-      }
     end,
   },
 
@@ -709,7 +703,7 @@ local plugin_specs = {
   -- file explorer
   {
     "nvim-tree/nvim-tree.lua",
-    keys = { "<space>s" },
+    event = "VeryLazy",
     config = function()
       require("config.nvim-tree")
     end,
@@ -761,17 +755,16 @@ local plugin_specs = {
     event = "BufReadPre",
     opts = { -- set to setup table
     },
+    config = function()
+      require("config.nvim-colorizer")
+    end,
   },
   {
     "stevearc/quicker.nvim",
     event = "FileType qf",
-    ---@module "quicker"
-    ---@type quicker.SetupOptions
-    opts = {
-      max_filename_width = function()
-        return math.floor(math.min(40, vim.o.columns / 2))
-      end,
-    },
+    config = function()
+      require("config.quicker")
+    end,
   },
   {
     "nickjvandyke/opencode.nvim",
@@ -794,45 +787,42 @@ local plugin_specs = {
     end,
   },
   {
-    "mfussenegger/nvim-lint",
-    config = function()
-      require("config.nvim-lint")
-    end,
-  },
-  {
     "xzbdmw/colorful-menu.nvim",
     config = function()
       require("config.colorful_menu")
     end,
   },
   {
-    'Julian/lean.nvim',
-    event = { 'BufReadPre *.lean', 'BufNewFile *.lean' },
-
-    dependencies = {
-      'neovim/nvim-lspconfig',
-      'nvim-lua/plenary.nvim',
-
-      -- optional dependencies:
-
-      -- a completion engine
-      --    hrsh7th/nvim-cmp or Saghen/blink.cmp are popular choices
-
-      -- 'nvim-telescope/telescope.nvim', -- for 2 Lean-specific pickers
-      -- 'andymass/vim-matchup',          -- for enhanced % motion behavior
-      -- 'andrewradev/switch.vim',        -- for switch support
-      -- 'tomtom/tcomment_vim',           -- for commenting
-    },
-
-    ---@type lean.Config
-    opts = { -- see below for full configuration options
-      mappings = true,
-    }
+    "Wansmer/treesj",
+    event = "VeryLazy",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("config.treesj")
+    end,
+  },
+  {
+    "MunifTanjim/nui.nvim",
+    event = "VeryLazy",
+  },
+  {
+    "tadaa/vimade",
+    config = function()
+      require("config.vimade")
+    end,
   },
 }
 
+if completion_engine == "nvim-cmp" then
+  vim.list_extend(plugin_specs, cmp_plugin_specs)
+elseif completion_engine == "blink" then
+  vim.list_extend(plugin_specs, blink_plugin_specs)
+else
+  vim.print(string.format("Unknown completion engine: %s!", completion_engine))
+end
+
 require("lazy").setup {
   spec = plugin_specs,
+  concurrency = 5,
   ui = {
     border = "rounded",
     title = "Plugin Manager",

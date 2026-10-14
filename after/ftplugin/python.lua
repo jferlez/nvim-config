@@ -16,60 +16,52 @@ opt.expandtab = true -- Expand tab to spaces so that tabs are spaces
 -- The following option is used to customize the option passed to ruff.
 vim.g.ruff_makeprg_params = ""
 
-local get_proj_root = function()
-  local project_marker = { ".git", "pyproject.toml" }
-  local project_root = vim.fs.root(0, project_marker)
-
-  return project_root
-end
-
-local get_py_env = function()
-  local project_root = get_proj_root()
-  if project_root == nil then
+local run_py_script = function()
+  local py_cmd = utils.get_py_cmd()
+  if py_cmd == nil then
+    vim.notify("can not find python to run this script!")
     return
   end
 
-  local venv_name = utils.get_virtual_env()
-
-  if venv_name ~= "" then
-    return "plain_venv"
+  local run_cmd = ""
+  if vim.fn.exists(":AsyncRun") == 2 then
+    run_cmd = string.format("AsyncRun %s -u %%", py_cmd)
+  else
+    run_cmd = string.format("!%s -u %%", py_cmd)
   end
 
-  -- check if this is uv-managed project
-  local uv_lock_path = vim.fs.joinpath(project_root, "uv.lock")
-  if vim.fn.filereadable(uv_lock_path) == 1 then
-    return "uv"
-  end
-
-  return ""
+  vim.cmd(run_cmd)
 end
 
-local py_env = get_py_env()
-
-if vim.fn.exists(":AsyncRun") == 2 then
-  local py_cmd = "python"
-
-  if py_env == "uv" then
-    py_cmd = "uv run python"
-  end
-
-  local rhs = string.format(":<C-U>AsyncRun %s -u %%<CR>", py_cmd)
-
-  vim.keymap.set("n", "<F9>", rhs, {
-    buffer = true,
-    silent = true,
-  })
-end
+vim.keymap.set("n", "<F9>", run_py_script, {
+  buffer = true,
+  silent = true,
+})
 
 -- format current file
 
-local py_fmt_cmd = "!black"
-if py_env == "uv" then
-  py_fmt_cmd = "!uv run black"
+local format_py_file = function()
+  local black_cmd = ""
+  local py_env = utils.get_py_env()
+
+  if py_env == "uv" then
+    black_cmd = "!uv run black"
+  elseif utils.executable("black") then
+    black_cmd = "!black"
+  end
+
+  if black_cmd == "" then
+    vim.notify("black not available!")
+  end
+
+  vim.print(black_cmd)
+  local format_cmd = string.format("silent %s %%", black_cmd)
+
+  vim.cmd(format_cmd)
 end
 
-local rhs = string.format("<cmd>silent %s %%<CR>", py_fmt_cmd)
-vim.keymap.set("n", "<space>f", rhs, {
+vim.keymap.set("n", "<space>f", format_py_file, {
+  desc = "format file",
   buffer = true,
   silent = true,
 })

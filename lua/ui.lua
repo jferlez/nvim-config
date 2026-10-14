@@ -162,10 +162,14 @@ require("vim._core.ui2").enable {
     --   height = 0.2, -- Maximum height while expanded for messages beyond 'cmdheight'.
     -- },
     dialog = { -- Options related to dialog window.
-      height = 0.2, -- Maximum height.
+      height = 0.4, -- Maximum height.
+    },
+    msg = { -- Options related to msg window.
+      height = 0.4, -- Maximum height.
+      timeout = 1000, -- Time a message is visible in the message window.
     },
     pager = { -- Options related to message window.
-      height = 0.3, -- Maximum height.
+      height = 0.4, -- Maximum height.
     },
    messagesopt = { -- Options related to msg window.
       height = 0.2, -- Maximum height.

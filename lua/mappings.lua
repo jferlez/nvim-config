@@ -62,8 +62,6 @@ keymap.set("n", [[\dT]], "<cmd>tabonly<CR>", {
 -- Move the cursor based on physical lines, not the actual lines.
 keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
 keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
-keymap.set("n", "^", "g^")
-keymap.set("n", "0", "g0")
 
 -- Do not include white space characters when using $ in visual mode,
 -- see https://vi.stackexchange.com/q/12607/15292
@@ -77,20 +75,6 @@ keymap.set({ "n", "x" }, "L", "g_")
 -- to reselect previous visual area, see https://superuser.com/q/310417/736190
 keymap.set("x", "<", "<gv")
 keymap.set("x", ">", ">gv")
-
--- Restart nvim
-keymap.set("n", "<leader>sv", function()
-  vim.print("Use ZR to restart nvim instead!")
-end)
-
-keymap.set("n", "ZR", function()
-  local current_buf_path = vim.fn.expand("%")
-  local restart_cmd = string.format("restart edit %s", current_buf_path)
-  vim.cmd(restart_cmd)
-end, {
-  silent = true,
-  desc = "Restart nvim",
-})
 
 -- Reselect the text that has just been pasted, see also https://stackoverflow.com/a/4317090/6064933.
 keymap.set("n", "<leader>v", "printf('`[%s`]', getregtype()[0])", {

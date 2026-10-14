@@ -1,4 +1,5 @@
 local utils = require("utils")
+local lsp_utils = require("lsp_utils")
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("lsp_buf_conf", { clear = true }),
@@ -33,7 +34,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
           -- each item in options.items contain the location info for a definition provided by LSP server
           for _, def_location in pairs(options.items) do
-            -- use filename and line number to uniquelly indentify a definition,
+            -- use filename and line number to uniquely identify a definition,
             -- we do not expect/want multiple definition in single line!
             local hash_key = def_location.filename .. def_location.lnum
 
@@ -63,13 +64,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "K", function()
       vim.lsp.buf.hover {
         border = "single",
-        max_height = 20,
-        max_width = 130,
+        max_height = 40,
+        max_width = 100,
         close_events = { "CursorMoved", "BufLeave", "WinLeave", "LSPDetach" },
       }
     end)
     map("n", "<C-k>", vim.lsp.buf.signature_help)
-    map("n", "<space>rn", vim.lsp.buf.rename, { desc = "varialbe rename" })
+    map("n", "<space>rn", vim.lsp.buf.rename, { desc = "variable rename" })
     map("n", "<space>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
     map("n", "<space>wa", vim.lsp.buf.add_workspace_folder, { desc = "add workspace folder" })
     map("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, { desc = "remove workspace folder" })
@@ -95,7 +96,7 @@ local capabilities = require("lsp_utils").get_default_capabilities()
 vim.lsp.config("*", {
   capabilities = capabilities,
   flags = {
-    debounce_text_changes = 500,
+    debounce_text_changes = 150,
   },
 })
 
@@ -110,16 +111,24 @@ local enabled_lsp_servers = {
 
   -- the server can be install via homebrew: brew install golangci-lint-langserver
   -- golangci-lint also needs to be installed: https://github.com/golangci/golangci-lint
-  golangci_lint_ls = { exe = "golangci-lint-langserver", optional = true },
   gopls = { exe = "gopls", optional = false },
+  golangci_lint_ls = { exe = "golangci-lint-langserver", optional = true },
 
+  -- language server for lua
   lua_ls = { exe = "lua-language-server", optional = false },
+  -- emmylua_ls = { exe = "emmylua_ls", optional = true },
 
+  -- python related LSP
   -- pyright = { exe = "delance-langserver", optional = false },
-  ruff = { exe = "ruff", optional = false },
+  -- pyrefly = { exe = "pyrefly", optional = true },
+  -- ty = { exe = "ty", optional = true },
+  ruff = { exe = "ruff", optional = true },
 
   vimls = { exe = "vim-language-server", optional = true },
   yamlls = { exe = "yaml-language-server", optional = true },
+
+  -- spelling/typo check
+  typos_lsp = { exe = "typos-lsp", optional = true },
 }
 
 for server_name, server_info in pairs(enabled_lsp_servers) do
@@ -201,3 +210,24 @@ end, {
   end,
 })
 --vim.lsp.log.set_level('debug')
+
+vim.api.nvim_create_user_command("LspAttached", function()
+  local size = {
+    width = 40,
+    height = 10,
+  }
+
+  local win_width, win_height = vim.api.nvim_win_get_width(0), vim.api.nvim_win_get_height(0)
+  local pos_col = win_width / 2 - size.width / 2
+  local pos_row = win_height / 2 - size.height / 2
+
+  local position = {
+    col = pos_col,
+    row = pos_row,
+  }
+
+  lsp_utils.show_lsp_menu(size, position)
+end, {
+  desc = "Show LSP attached to current buffer",
+})
+

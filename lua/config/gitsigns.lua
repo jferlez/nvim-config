@@ -1,12 +1,13 @@
 local gs = require("gitsigns")
+local symbol_icon = require("symbol_icon")
 
 gs.setup {
   signs = {
-    add = { text = "+" },
-    change = { text = "~" },
-    delete = { text = "_" },
-    topdelete = { text = "‾" },
-    changedelete = { text = "│" },
+    add = { text = symbol_icon.git.diff.added },
+    change = { text = symbol_icon.git.diff.modified },
+    delete = { text = symbol_icon.git.diff.delete },
+    topdelete = { text = symbol_icon.git.diff.topdelete },
+    changedelete = { text = symbol_icon.git.diff.changedelete },
   },
   word_diff = false,
   -- update_debounce = 1000, -- Increase this value (in milliseconds)
@@ -28,7 +29,7 @@ gs.setup {
         return "]c"
       end
       vim.schedule(function()
-        gs.next_hunk()
+        gs.nav_hunk("next")
       end)
       return "<Ignore>"
     end, { expr = true, desc = "next hunk" })
@@ -38,7 +39,7 @@ gs.setup {
         return "[c"
       end
       vim.schedule(function()
-        gs.prev_hunk()
+        gs.nav_hunk("prev")
       end)
       return "<Ignore>"
     end, { expr = true, desc = "previous hunk" })

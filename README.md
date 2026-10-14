@@ -10,10 +10,7 @@
       <img alt="Windows" src="https://img.shields.io/badge/Windows-%23.svg?style=flat-square&logo=windows&color=0078D6&logoColor=white" />
     </a>
     <a href="https://github.com/neovim/neovim/releases/tag/stable">
-      <img src="https://img.shields.io/badge/Neovim-0.12.2-blueviolet.svg?style=flat-square&logo=Neovim&logoColor=green" alt="Neovim minimum version"/>
-    </a>
-    <a href="https://github.com/jdhao/nvim-config/search?l=vim-script">
-      <img src="https://img.shields.io/github/languages/top/jdhao/nvim-config" alt="Top languages"/>
+      <img src="https://img.shields.io/badge/Neovim-0.12.6-blueviolet.svg?style=flat-square&logo=Neovim&logoColor=green" alt="Neovim minimum version"/>
     </a>
     <a href="https://github.com/jdhao/nvim-config/graphs/commit-activity">
       <img src="https://img.shields.io/github/commit-activity/m/jdhao/nvim-config?style=flat-square" />
@@ -21,10 +18,7 @@
     <a href="https://github.com/jdhao/nvim-config/graphs/contributors">
       <img src="https://img.shields.io/github/contributors/jdhao/nvim-config?style=flat-square" />
     </a>
-    <a>
-      <img src="https://img.shields.io/github/repo-size/jdhao/nvim-config?style=flat-square" />
-    </a>
-    <a href="https://github.com/jdhao/nvim-config/blob/master/LICENSE">
+    <a href="https://github.com/jdhao/nvim-config/blob/main/LICENSE">
       <img src="https://img.shields.io/github/license/jdhao/nvim-config?style=flat-square&logo=GNU&label=License" alt="License"/>
     </a>
     <a href="https://deepwiki.com/jdhao/nvim-config">
@@ -77,19 +71,13 @@ and how to set up on different platforms (Linux, macOS, and Windows).
 + Markdown previewing via [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim)
 + LaTeX editing and previewing via [vimtex](https://github.com/lervag/vimtex)
 + Animated GUI style notification via [nvim-notify](https://github.com/rcarriga/nvim-notify).
-+ Tags navigation via [vista](https://github.com/liuchengxu/vista.vim).
++ Symbol outline via [aerial.nvim](https://github.com/stevearc/aerial.nvim).
 + Code folding with [nvim-ufo](https://github.com/kevinhwang91/nvim-ufo) and [statuscol.nvim](https://github.com/luukvbaal/statuscol.nvim)
 + ......
 
 # UI Demo
 
 For more UI demos, check [here](https://github.com/jdhao/nvim-config/issues/15).
-
-## Start screen with dashboard-nvim
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/16662357/183256752-fb23b215-a6b8-4646-beed-9999f52d53f1.png" width="800">
-</p>
 
 ## File fuzzy finding using fzf-lua
 
@@ -107,12 +95,6 @@ For more UI demos, check [here](https://github.com/jdhao/nvim-config/issues/15).
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/16662357/128590833-aaa05d53-19ef-441d-a5a9-ba1bbd3936c1.gif" width="800">
-</p>
-
-## Tags
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/16662357/128589584-4036a1a2-2e0a-4bbe-8aaf-ff8b91644648.jpg" width="800">
 </p>
 
 ## Cursor jump via hop.nvim
