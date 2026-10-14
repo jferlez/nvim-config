@@ -9,6 +9,12 @@ gs.setup {
     changedelete = { text = "│" },
   },
   word_diff = false,
+  -- update_debounce = 1000, -- Increase this value (in milliseconds)
+  -- -- Turn off aggressive git index watching which triggers Dropbox sync loops
+  -- watch_gitdir = {
+  --   enable = false, -- Disables continuous watching of the .git directory
+  --   interval = 5000, -- Safely poll every 5 seconds instead of continuous hook updates
+  -- },
   on_attach = function(bufnr)
     local function map(mode, l, r, opts)
       opts = opts or {}
