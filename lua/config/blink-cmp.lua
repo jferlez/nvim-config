@@ -108,8 +108,8 @@ require("blink.cmp").setup {
         auto_show = true,
       },
     },
-    keymap = {
-      ["<CR>"] = { "select_and_accept", "fallback" },
-    },
+    -- keymap = {
+    --   ["<CR>"] = { "select_and_accept", "fallback" },
+    -- },
   },
 }
