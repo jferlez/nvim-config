@@ -266,7 +266,7 @@ api.nvim_create_autocmd("BufReadPre", {
 
 -- check if current file is formatted
 local ft_to_command = {
-  python = { "black", "--check" },
+  -- python = { "black", "--check" },
   lua = { "stylua", "--check" },
 }
 
@@ -300,14 +300,14 @@ api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 
-api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
-  group = api.nvim_create_augroup("auto_save", { clear = true }),
-  pattern = { "*" },
-  nested = true,
-  desc = "Auto save current file",
-  callback = function(ev)
-    if utils.buf_writable(ev.buf) then
-      vim.cmd([[silent! update]])
-    end
-  end,
-})
+-- api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+--   group = api.nvim_create_augroup("auto_save", { clear = true }),
+--   pattern = { "*" },
+--   nested = true,
+--   desc = "Auto save current file",
+--   callback = function(ev)
+--     if utils.buf_writable(ev.buf) then
+--       vim.cmd([[silent! update]])
+--     end
+--   end,
+-- })

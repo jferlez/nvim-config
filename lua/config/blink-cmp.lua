@@ -8,7 +8,7 @@ require("blink.cmp").setup {
     preset = "default",
     ["<Tab>"] = { "select_next", "fallback" },
     ["<S-Tab>"] = { "select_prev", "fallback" },
-    ["<CR>"] = { "select_and_accept", "fallback" },
+    ["<CR>"] = { "accept", "fallback" },
     ["<C-U>"] = { "scroll_documentation_up", "fallback" },
     ["<C-D>"] = { "scroll_documentation_down", "fallback" },
   },
@@ -23,6 +23,12 @@ require("blink.cmp").setup {
   completion = {
     menu = {
       winhighlight = "Normal:BlinkCmpMenu,FloatBorder:FloatBorder,CursorLine:BlinkCmpMenuSelection,Search:None",
+    },
+    list = {
+      selection = {
+        preselect = false,
+        auto_insert = true,
+      },
     },
     documentation = {
       auto_show = true,
@@ -107,9 +113,15 @@ require("blink.cmp").setup {
       menu = {
         auto_show = true,
       },
+      list = {
+        selection = {
+          preselect = false,
+          auto_insert = true,
+        },
     },
-    -- keymap = {
-    --   ["<CR>"] = { "select_and_accept", "fallback" },
-    -- },
+    },
+    keymap = {
+      ["<CR>"] = { "accept", "fallback" },
+    },
   },
 }
